@@ -1,0 +1,13 @@
+{
+  "name": "toolreg",
+  "version": "0.0.0",
+  "description": "LLM's Tool Registry. Provide a registry for LLM's to find and use tools.",
+  "keywords": [
+    "llm",
+    "tool",
+    "registry",
+    "tools"
+  ],
+  "author": "Antonio Moura (antl3x)",
+  "packageManager": "pnpm@10.6.5"
+}

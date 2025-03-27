@@ -1,0 +1,3 @@
+  creation_rules:
+  # Fallback rule for all other files
+  - pgp: '00BF3259E59E7708631132B0017C53DA3AFE113A'

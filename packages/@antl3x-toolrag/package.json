@@ -1,0 +1,29 @@
+{
+  "name": "@antl3x/toolrag",
+  "version": "0.0.0",
+  "type": "module",
+  "keywords": [],
+  "packageManager": "pnpm@10.6.5",
+  "dependencies": {
+    "@google-cloud/aiplatform": "^4.1.0",
+    "@google-cloud/vertexai": "^0.5.0",
+    "@libsql/client": "^0.15.1",
+    "@modelcontextprotocol/sdk": "^1.8.0",
+    "openai": "^4.89.1",
+    "sqlite-vec": "0.1.7-alpha.2",
+    "sqlite3": "^5.1.7",
+    "winston": "^3.17.0",
+    "zod": "^3.24.2"
+  },
+  "devDependencies": {
+    "@types/node": "^22.13.13",
+    "@typescript-eslint/eslint-plugin": "^8.28.0",
+    "@typescript-eslint/parser": "^8.28.0",
+    "eslint": "^9.23.0",
+    "eslint-config-prettier": "^10.1.1",
+    "prettier": "^3.5.3",
+    "tsx": "^4.19.3",
+    "typescript": "^5.8.2",
+    "zx": "^8.4.1"
+  }
+}

@@ -25,6 +25,7 @@ type MCPTool = z.infer<typeof mcpToolSchema>;
 class ToolRAG {
   private _mcpClients: Client[] = [];
   private _mcpTools: MCPTool[] = [];
+  private _toolToClientMap: Map<string, Client> = new Map();
   private _embeddingProvider: EmbeddingProvider | null = null;
   private _db: LibSQLClient | null = null;
   private _config: ToolRAGConfig;
@@ -115,6 +116,11 @@ class ToolRAG {
     const res = await client.listTools();
     this._log.info(`Found ${res.tools.length} tools from ${url}`);
     this._log.info(res.tools.map((tool) => tool.name).join(', '));
+
+    // Add each tool to the toolToClientMap
+    for (const tool of res.tools) {
+      this._toolToClientMap.set(tool.name, client);
+    }
 
     this._mcpTools.push(...res.tools);
     await this._refreshToolsEmbeddings();
@@ -307,9 +313,6 @@ class ToolRAG {
     const { relevanceThreshold = 0.15 } = options || {};
     this._ensureInitialized();
 
-    // Prune missing tools
-    await this._pruneMissingTools();
-
     // Check if we have tools in the database
     const count = await this._db!.execute(`SELECT COUNT(*) as count FROM ${this._db_table_name()}`);
     const toolCount = (count.rows[0].count as number) || 0;
@@ -326,6 +329,22 @@ class ToolRAG {
     return similarTools
       .filter(({ relevance }) => relevance >= relevanceThreshold)
       .map(({ tool, relevance }) => this._convertToOpenAIFunction(tool, relevance));
+  }
+
+  async callTool(toolName: string, input: any) {
+    this._ensureInitialized();
+
+    const tool = this._mcpTools.find((t) => t.name === toolName);
+    if (!tool) throw new Error(`Tool ${toolName} not found`);
+
+    const client = this._toolToClientMap.get(toolName);
+    if (!client) throw new Error(`MCP client for tool ${toolName} not found`);
+
+    const res = await client.callTool({
+      name: toolName,
+      arguments: input,
+    });
+    return res;
   }
 }
 

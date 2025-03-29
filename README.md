@@ -82,4 +82,4 @@ ToolRAG offers flexible configuration options:
 
 ## 📝 License
 
-Apache 2.0
+Apache License 2.0

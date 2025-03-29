@@ -1,0 +1,84 @@
+version: '3'
+
+tasks:
+  install:
+    desc: Install dependencies
+    cmds:
+      - pnpm install
+
+  clean:
+    desc: Clean build artifacts
+    cmds:
+      - rm -rf dist || true
+      - mkdir -p dist
+
+  build:esm:
+    desc: Build ESM version
+    cmds:
+      - echo "Building ESM version..."
+      - node_modules/.bin/tsc --project tsconfig.json --outDir dist/esm --module ESNext --moduleResolution bundler --declaration
+
+  build:cjs:
+    desc: Build CommonJS version
+    cmds:
+      - echo "Building CommonJS version..."
+      - node_modules/.bin/tsc --project tsconfig.json --outDir dist/cjs --module CommonJS --moduleResolution node --declaration
+
+  build:types:
+    desc: Build types package.json
+    cmds:
+      - mkdir -p dist/types
+      - cp dist/esm/*.d.ts dist/types/ 2>/dev/null || true
+      - cp dist/esm/**/*.d.ts dist/types/ 2>/dev/null || true
+
+  build:package-json:
+    desc: Create package.json files for both formats
+    cmds:
+      - echo "Creating package.json files for both formats..."
+      - |
+        node -e "
+          const pkg = require('./package.json');
+          delete pkg.devDependencies;
+          delete pkg.scripts;
+          require('fs').writeFileSync('dist/esm/package.json', JSON.stringify({...pkg, type: 'module'}, null, 2));
+        "
+      - |
+        node -e "
+          const pkg = require('./package.json');
+          delete pkg.devDependencies;
+          delete pkg.scripts;
+          require('fs').writeFileSync('dist/cjs/package.json', JSON.stringify({...pkg, type: 'commonjs'}, null, 2));
+        "
+      - echo "Copying README and LICENSE..."
+      - cp ../../README.md ./
+      - cp ../../LICENSE ./
+
+  build:
+    desc: Build both ESM and CJS versions
+    deps: [clean]
+    cmds:
+      - task: build:esm
+      - task: build:cjs
+      - task: build:types
+      - task: build:package-json
+
+  test:
+    desc: Run tests
+    cmds:
+      - echo "Running tests..."
+      - pnpm test
+
+  lint:
+    desc: Run linter
+    cmds:
+      - node_modules/.bin/eslint .
+
+  prepublish:
+    desc: Prepare for publishing
+    deps: [lint, test, build]
+
+  publish:
+    desc: Publish to npm
+    cmds:
+      - echo "Publishing to npm..."
+      - npm publish --access=public

@@ -1,9 +1,50 @@
 {
   "name": "@antl3x/toolrag",
-  "version": "0.0.0",
+  "version": "0.0.2-beta.2",
   "type": "module",
-  "keywords": [],
+  "description": "Context-aware tool retrieval for language models - unlock the full potential of LLM function calling without context window limitations or constraints.",
+  "keywords": [
+    "llm",
+    "tool",
+    "registry",
+    "tools",
+    "mcp",
+    "openai",
+    "anthropic",
+    "llm-tools",
+    "function-calling",
+    "llm-tool-call",
+    "mcp-servers",
+    "mcp-server"
+  ],
+  "author": "Antonio Moura (antl3x)",
+  "license": "Apache-2.0",
   "packageManager": "pnpm@10.6.5",
+  "main": "./dist/cjs/index.js",
+  "module": "./dist/esm/index.js",
+  "types": "./dist/esm/index.d.ts",
+  "exports": {
+    ".": {
+      "import": {
+        "types": "./dist/esm/index.d.ts",
+        "default": "./dist/esm/index.js"
+      },
+      "require": {
+        "types": "./dist/cjs/index.d.ts",
+        "default": "./dist/cjs/index.js"
+      }
+    }
+  },
+  "files": [
+    "dist",
+    "README.md"
+  ],
+  "scripts": {
+    "build": "task build",
+    "test": "echo \"No tests yet\"",
+    "lint": "task lint",
+    "prepublishOnly": "task prepublish"
+  },
   "dependencies": {
     "@google-cloud/aiplatform": "^4.1.0",
     "@google-cloud/vertexai": "^0.5.0",
@@ -16,6 +57,8 @@
     "zod": "^3.24.2"
   },
   "devDependencies": {
+    "@eslint/config-helpers": "^0.2.0",
+    "@eslint/js": "^9.23.0",
     "@types/node": "^22.13.13",
     "@typescript-eslint/eslint-plugin": "^8.28.0",
     "@typescript-eslint/parser": "^8.28.0",

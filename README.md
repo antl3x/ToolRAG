@@ -22,6 +22,16 @@ ToolRAG provides a seamless solution for using an unlimited number of function d
 3. **Query Analysis**: When a user query comes in, ToolRAG finds the most relevant tools via semantic search.
 4. **Tool Execution**: Execute selected tools against the appropriate MCP servers.
 
+## Installation
+
+```bash
+npm install @antl3x/toolrag
+# or
+yarn add @antl3x/toolrag
+# or
+pnpm add @antl3x/toolrag
+```
+
 ## 🚀 Quick Start
 
 ```typescript

@@ -1,72 +1,95 @@
-# ToolRAG SDK
+# ToolRAG 🛠️
 
-ToolRAG is a TypeScript library for efficiently managing tools with vector-based semantic search across different embedding providers.
+> Infinity functions, zero context limits — unlock the full potential of LLM function calling without the constraints
 
-## Features
+**Context-aware tool retrieval for language models**
 
-- Register tools from MCP (Model Context Protocol) servers
-- Store tool embeddings in a SQLite database (via libsql)
-- Search for relevant tools semantically by query
-- Efficient embedding caching with hash-based tracking
-- Support for multiple embedding providers (OpenAI, Google Vertex AI)
+ToolRAG provides a seamless solution for using an unlimited number of function definitions with Large Language Models (LLMs), without worrying about context window limitations, costs, or performance degradation.
+
+## 🌟 Key Features
+
+- **Unlimited Tool Definitions**: Say goodbye to context window constraints. ToolRAG dynamically selects only the most relevant tools for each query.
+- **Semantic Tool Search**: Uses vector embeddings to find the most contextually relevant tools for a given user query.
+- **Cost Optimization**: Reduces token usage by only including the most relevant function definitions.
+- **Performance Improvement**: Prevents performance degradation that occurs when overwhelming LLMs with too many function definitions.
+- **MCP Integration**: Works with any Model Context Protocol (MCP) compliant servers, enabling access to a wide ecosystem of tools.
+- **OpenAI Compatible**: Format tools as OpenAI function definitions for seamless integration.
+
+## 🔍 How It Works
+
+1. **Tool Registration**: ToolRAG connects to MCP servers and registers available tools.
+2. **Embedding Generation**: Tool descriptions and parameters are embedded using vector embeddings (OpenAI or Google).
+3. **Query Analysis**: When a user query comes in, ToolRAG finds the most relevant tools via semantic search.
+4. **Tool Execution**: Execute selected tools against the appropriate MCP servers.
 
 ## Installation
 
 ```bash
-npm install @toolreg-sdk
+npm install @antl3x/toolrag
 # or
-yarn add @toolreg-sdk
+yarn add @antl3x/toolrag
 # or
-pnpm add @toolreg-sdk
+pnpm add @antl3x/toolrag
 ```
 
-## Usage
+## 🚀 Quick Start
 
 ```typescript
-import ToolRAG from '@toolreg-sdk';
+import { ToolRAG } from "@antl3x/toolrag";
+import OpenAI from "openai";
 
-// Initialize ToolRAG with embedding provider configuration
-const toolReg = new ToolRAG({
-  // Use OpenAI embeddings
-  embeddingProvider: {
-    type: 'openai',
-    apiKey: process.env.OPENAI_API_KEY,
-    model: 'text-embedding-3-small', // optional, defaults to text-embedding-3-small
-  },
-  // Or use Google embeddings
-  // embeddingProvider: {
-  //   type: 'google',
-  //   projectId: process.env.GOOGLE_CLOUD_PROJECT,
-  //   location: 'us-central1', // optional, defaults to us-central1
-  //   model: 'text-embedding-005' // optional, defaults to text-embedding-005
-  // },
-  dbUrl: 'file:toolreg.db', // SQLite database URL
+// Initialize ToolRAG with MCP servers
+const toolRag = await ToolRAG.init({
+  mcpServers: [
+    "https://mcp.pipedream.net/token/google_calendar",
+    "https://mcp.pipedream.net/token/stripe",
+    // Add as many tool servers as you need!
+  ],
 });
 
-// Register tools from MCP servers
-await toolReg.registerMcpServer('https://your-mcp-server-url');
+const userQuery =
+  "What events do I have tomorrow? Also, check my stripe balance.";
 
-// Update embeddings efficiently (only generates for new or changed tools)
-await toolReg.updateEmbeddings();
+// Get relevant tools for a specific query
+const client = new OpenAI();
 
-// Search for relevant tools based on a query
-const relevantTools = await toolReg.listToolsFiltered('schedule a meeting for tomorrow', {
-  limit: 3, // optional, number of tools to return
-  includeRelevance: true, // optional, include relevance scores
+const response = await client.responses.create({
+  model: "gpt-4o",
+  input: userQuery,
+  tools: await toolRag.listTools(userQuery),
 });
 
-console.log(relevantTools);
+// Execute the function calls from the LLM response
+for (const call of response.output.filter(
+  (item) => item.type === "function_call"
+)) {
+  const result = await toolRag.callTool(call.name, JSON.parse(call.arguments));
+  console.log(result);
+}
 ```
 
-## Environment Variables
+## 🏗️ Architecture
 
-- `OPENAI_API_KEY`: API key for OpenAI (required if using OpenAI provider)
-- `OPENAI_EMBED_MODEL`: Model to use for OpenAI embeddings (default: 'text-embedding-3-small')
-- `GOOGLE_CLOUD_PROJECT`: Google Cloud project ID (required if using Google provider)
-- `GOOGLE_LOCATION`: Google Cloud location (default: 'us-central1')
-- `GOOGLE_EMBED_MODEL`: Model to use for Google embeddings (default: 'text-embedding-005')
-- `LIBSQL_URL`: URL for libsql database (default: 'file:toolreg.db')
+ToolRAG uses a Retrieval-Augmented Generation (RAG) approach optimized for tools:
 
-## License
+1. **Storage**: LibSQL database to store tool definitions and their vector embeddings
+2. **Retrieval**: Cosine similarity search to find the most relevant tools
+3. **Execution**: Direct integration with MCP servers for tool execution
 
-MIT
+## 👨‍💻 Use Cases
+
+- **Multi-tool AI Assistants**: Build assistants that can access hundreds of APIs
+- **Enterprise Systems**: Connect to internal tools and services without context limits
+- **AI Platforms**: Provide a unified interface for tool discovery and execution
+
+## 🔧 Configuration Options
+
+ToolRAG offers flexible configuration options:
+
+- Multiple embedding providers (OpenAI, Google)
+- Customizable relevance thresholds
+- Database configuration for persistence
+
+## 📝 License
+
+Apache License 2.0

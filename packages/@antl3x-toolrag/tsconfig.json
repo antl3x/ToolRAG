@@ -3,11 +3,10 @@
     "target": "ESNext",
     "module": "ESNext",
     "moduleResolution": "Bundler",
-    "allowImportingTsExtensions": true,
+    "allowImportingTsExtensions": false,
     "allowSyntheticDefaultImports": true,
     "resolveJsonModule": true,
     "isolatedModules": true,
-    "noEmit": true,
     "strict": true,
     "esModuleInterop": true,
     "skipLibCheck": true,
@@ -17,8 +16,13 @@
     "baseUrl": "./",
     "paths": {
       "@*": ["source/@*"]
-    }
+    },
+    "declaration": true,
+    "declarationMap": true,
+    "sourceMap": true,
+    "noEmit": false,
+    "outDir": "dist/esm"
   },
   "include": ["source"],
-  "exclude": ["node_modules"]
+  "exclude": ["node_modules", "dist", "source/_playground.*"]
 }

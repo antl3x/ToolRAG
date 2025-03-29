@@ -1,13 +1,30 @@
 {
-  "name": "toolreg",
-  "version": "0.0.0",
-  "description": "LLM's Tool Registry. Provide a registry for LLM's to find and use tools.",
+  "name": "@antl3x/toolrag",
+  "description": "Infinity functions, zero context limits — unlock the full potential of LLM function calling without the constraints. Context-aware tool retrieval for language models.",
   "keywords": [
     "llm",
     "tool",
+    "tools",
     "registry",
-    "tools"
+    "mcp",
+    "openai",
+    "anthropic",
+    "llm-tools",
+    "function-calling",
+    "llm-tool-call",
+    "mcp-servers",
+    "mcp-server",
+    "rag",
+    "retrieval",
+    "embeddings",
+    "context-window",
+    "vector-search"
   ],
   "author": "Antonio Moura (antl3x)",
-  "packageManager": "pnpm@10.6.5"
+  "license": "Apache-2.0",
+  "packageManager": "pnpm@10.6.5",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/antl3x/ToolRAG"
+  }
 }

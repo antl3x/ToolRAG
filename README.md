@@ -1,9 +1,10 @@
-# ToolRAG 🛠️
+![toolrag-header](https://github.com/user-attachments/assets/9e24c88e-65bb-47b6-950d-93b46e88a183)
 
-> Infinity functions, zero context limits — unlock the full potential of LLM function calling without the constraints
+<div align="center"><strong>ToolRAG</strong></div>
+<div align="center">Infinity LLM tools, zero context conntraints<br />Context-aware tool retrieval for large language models.</div>
 
-**Context-aware tool retrieval for language models**
 
+# Introduction
 ToolRAG provides a seamless solution for using an unlimited number of function definitions with Large Language Models (LLMs), without worrying about context window limitations, costs, or performance degradation.
 
 ## 🌟 Key Features

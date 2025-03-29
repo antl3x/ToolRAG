@@ -1,4 +1,4 @@
-![toolrag-header](https://github.com/user-attachments/assets/9e24c88e-65bb-47b6-950d-93b46e88a183)
+![toolrag-header](https://github.com/user-attachments/assets/ae45be26-d473-43d3-8432-48d68635a6f5)
 
 <div align="center"><strong>ToolRAG</strong></div>
 <div align="center">Infinity LLM tools, zero context conntraints<br />Context-aware tool retrieval for large language models.</div>

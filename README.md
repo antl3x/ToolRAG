@@ -1,5 +1,7 @@
 # ToolRAG 🛠️
 
+> Infinity functions, zero context limits — unlock the full potential of LLM function calling without the constraints
+
 **Context-aware tool retrieval for language models**
 
 ToolRAG provides a seamless solution for using an unlimited number of function definitions with Large Language Models (LLMs), without worrying about context window limitations, costs, or performance degradation.
